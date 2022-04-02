@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import "./App.css";
 import AddTask from "./components/AddTask";
@@ -10,35 +11,47 @@ function App() {
 
   const baseUrl = "http://localhost:5000/tasks";
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const res = await fetch(baseUrl);
-      const data = await res.json();
+  // fetching tasks
+  const fetchTasks = async () => {
+    const { data } = await axios(baseUrl);
+    console.log(data);
+    setTasks(data);
+  };
 
-      console.log(data);
-    };
+  useEffect(() => {
     fetchTasks();
   }, []);
 
-  // fetching tasks
+  // Adding Task
+
+  const addTask = async (newTask) => {
+    const res = await axios.post(baseUrl, newTask);
+    console.log(res);
+    fetchTasks();
+  };
 
   // Deleting Task
-  const deleteTask = (deletedTaskID) => {
-    setTasks(tasks.filter((task) => task.id !== deletedTaskID));
+
+  const deleteTask = async (deletedTaskID) => {
+    await axios.delete(`${baseUrl}/${deletedTaskID}`);
+    fetchTasks();
   };
-  // Adding Task
-  const addTask = (newTask) => {
-    const id = Math.floor(Math.random() * 1000 + 1);
-    const addNewTask = { id, ...newTask };
-    setTasks([...tasks, addNewTask]);
+  // Toggle Done
+  const toggleDone = async (toggleDoneID) => {
+    const { data } = await axios.get(`${baseUrl}/${toggleDoneID}`);
+    console.log(data);
+    const updatedTask = { ...data, isDone: !data.isDone };
+    await axios.put(`${baseUrl}/${toggleDoneID}`, updatedTask);
+    fetchTasks();
   };
-  const toggleDone = (toggleDoneID) => {
+
+  /* const toggleDone = (toggleDoneID) => {
     setTasks(
       tasks.map((task) =>
         task.id === toggleDoneID ? { ...task, isDone: !task.isDone } : task
       )
     );
-  };
+  }; */
   // SHOWING INPUT
   const toggleShow = () => {
     setShowAddTask(!showAddTask);
