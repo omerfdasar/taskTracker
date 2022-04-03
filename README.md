@@ -1,4 +1,4 @@
-# Project-002 : Task Tracker (RP-02)
+# Project : Task Tracker 
 
 ## Description
 
@@ -73,8 +73,4 @@ Build a Task Tracker App using ReactJS.
 - Step 5: Push your application into your own public repo on Github
 
 - Step 6: Add project gif to your project and README.md file.
-
-## Notes
-
-- You can add additional functionalities to your app.
 
